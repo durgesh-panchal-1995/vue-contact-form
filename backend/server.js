@@ -6,9 +6,21 @@ const nodemailer = require("nodemailer");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST"]
+}));
+
 app.use(express.json());
 
+
+// TEST ROUTE
+app.get("/", (req, res) => {
+  res.send("Backend Working Successfully");
+});
+
+
+// CONTACT ROUTE
 app.post("/contact", async (req, res) => {
 
   const { name, email, contact, subject, message } = req.body;
@@ -16,14 +28,11 @@ app.post("/contact", async (req, res) => {
   try {
 
     const transporter = nodemailer.createTransport({
-
       service: "gmail",
-
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
       }
-
     });
 
     const mailOptions = {
@@ -68,5 +77,5 @@ app.post("/contact", async (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server Running on ${PORT}`);
+  console.log(`Server Running on Port ${PORT}`);
 });
